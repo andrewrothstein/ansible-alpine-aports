@@ -1,0 +1,4 @@
+---
+# defaults file for alpine-aports
+alpine_aports_home_dir: /home/abuild
+alpine_aports_install_dir: /home/abuild/aports

@@ -1,0 +1,29 @@
+---
+- name: install pkgs
+  with_items:
+    - alpine-sdk
+    - shadow
+  package:
+    name: '{{item}}'
+    state: present
+- name: create the abuild user
+  become: yes
+  become_user: root
+  user:
+    name: abuild
+    state: present
+    groups:
+      - abuild
+      - wheel
+- name: initialize abuild keys
+  become: yes
+  become_user: abuild
+  command: abuild-keygen -a -i -n
+  args:
+    creates: '{{alpine_aports_home_dir}}/.abuild'
+- name: clone aport git repo into abuild home directory
+  become: yes
+  become_user: abuild
+  git:
+    repo: https://github.com/alpinelinux/aports.git
+    dest: '{{alpine_aports_install_dir}}'
